@@ -132,7 +132,7 @@ Mercur is pre-configured for a smooth, multi-service deployment on Railway using
 
 For a detailed, step-by-step guide on deploying this boilerplate to Railway, including service configuration (Backend, Vendor, Storefront) and environment variable setup, please refer to my comprehensive blog post:
 
-**[How to Deploy Mercur to Railway: A Professional Guide for Serverless MedusaJS](https://www.google.com/search?q=https://your-medium-blog-post-url-here)**
+**[How to Deploy Mercur to Railway: A Professional Guide for Serverless MedusaJS](https://dtoyoda10.medium.com/how-to-deploy-mercur-to-railway-a-professional-guide-for-serverless-medusajs-5a30f8e3dcdb)**
 
 **Key deployment steps covered in the guide:**
 
