@@ -1,168 +1,216 @@
-# Mercur Railway Boilerplate
+# MercurJS Railway Boilerplate
 
+A ready-to-use multi-vendor marketplace built with MedusaJS and Next.js. Deploy to Railway in minutes.
 
+## What's Included
 
-**Serverless MedusaJS E-commerce Made Easy on Railway**
+This is a complete marketplace solution with:
 
-Mercur is a powerful, opinionated boilerplate designed to jumpstart your headless e-commerce project with MedusaJS, optimized for seamless serverless deployment on Railway. It provides a pre-configured monorepo structure with PNPM workspaces, allowing you to manage your Medusa API, Admin Dashboard, and Storefront as interconnected but independently deployable services.
+- Multi-vendor marketplace with commission management
+- Stripe Connect for vendor payments
+- Next.js 15 storefront (App Router, i18n, Tailwind)
+- Customized admin panel for vendors
+- Real-time chat between customers and vendors
+- Product search with Algolia
+- Email notifications via Resend
+- Monorepo setup with PNPM and Turbo
+- CI/CD pipeline with GitHub Actions
 
-This boilerplate significantly reduces setup time, letting you focus on building features rather than wrestling with infrastructure.
-
-
-
-## Features
-
-* **MedusaJS Backend API:** The core headless commerce engine, ready for customization.
-* **Medusa Admin Dashboard (Vendor):** A pre-configured frontend for managing your store data.
-* **Next.js Storefront (Customer-facing):** A modern, performant e-commerce frontend example.
-* **Monorepo Structure (PNPM Workspaces):** Efficiently manage multiple interdependent applications in one repository.
-* **PostgreSQL Integration:** Seamlessly connect to a robust relational database (e.g., Railway PostgreSQL plugin).
-* **S3-compatible File Storage (Optional):** Easy integration for product images and assets (e.g., AWS S3, Cloudflare R2).
-* **Redis Integration (Optional):** Ready for caching and job queues to enhance performance.
-* **Nixpacks for Zero-Config Deployment:** Optimized build system automatically detected by Railway, no Dockerfiles needed.
-* **Preconfigured Environment Files:** Simplified setup for local development and deployment.
-
-
-
-## Prerequisites
-
-Before you begin, ensure you have the following installed:
-
-* **Node.js:** v18+ (LTS recommended)
-* **PNPM:** v8+ (`npm install -g pnpm`)
-* **Git:** For cloning the repository.
-* **Railway Account:** Sign up at [railway.app](https://railway.app/).
-* **GitHub Account:** For seamless deployment integration with Railway.
-
-
-
-## Getting Started (Local Development)
-
-Follow these steps to get Mercur up and running on your local machine.
-
-### 1. Clone the Repository
+## Quick Setup
 
 ```bash
-git clone [https://github.com/dtoyoda10/mercur-railway-boilerplate.git](https://github.com/dtoyoda10/mercur-railway-boilerplate.git)
+git clone https://github.com/dtoyoda10/mercur-railway-boilerplate.git
 cd mercur-railway-boilerplate
-````
-
-### 2\. Install Dependencies
-
-Mercur uses PNPM for efficient dependency management:
-
-```bash
 pnpm install
-```
 
-### 3\. Environment Variables
+docker-compose up -d
 
-Create `.env` files in the root of each `apps/` directory and configure them.
+cp apps/backend/.env.template apps/backend/.env
+cp apps/storefront/.env.template apps/storefront/.env
+cp apps/vendor-panel/.env.template apps/vendor-panel/.env
+# Edit the .env files with your config
 
-#### `apps/backend/.env`
-
-```env
-DATABASE_URL=postgres://user:password@localhost:5432/medusa_db # Your local PostgreSQL connection string
-NODE_ENV=development
-JWT_SECRET=your_jwt_secret_here # Must be a strong, random string
-COOKIE_SECRET=your_cookie_secret_here # Must be a strong, random string
-MEDUSA_ADMIN_CORS=http://localhost:7000,http://localhost:8000 # Admin and Storefront URLs for CORS
-MEDUSA_STORE_CORS=http://localhost:8000,http://localhost:7000 # Storefront and Admin URLs for CORS
-
-# Optional Redis Configuration (for caching/jobs)
-REDIS_URL=redis://localhost:6379
-```
-
-#### `apps/vendor/.env` (Medusa Admin)
-
-```env
-NEXT_PUBLIC_MEDUSA_BACKEND_URL=http://localhost:9000 # Your local Medusa backend URL
-```
-
-#### `apps/store/.env` (Next.js Storefront)
-
-```env
-NEXT_PUBLIC_MEDUSA_BACKEND_URL=http://localhost:9000 # Your local Medusa backend URL
-```
-
-### 4\. Database Setup
-
-Ensure you have a local PostgreSQL server running. Then, initialize your database:
-
-```bash
-# Run migrations (creates tables)
 pnpm run db:init
-
-# Create an admin user (interactive prompt)
 pnpm run db:admin
+pnpm run dev
 ```
 
-### 5\. Run Services Locally
+Access at http://localhost:8000 (storefront) and http://localhost:7000 (admin)
 
-Open three separate terminal windows and run each application:
+For detailed instructions, see [QUICKSTART.md](QUICKSTART.md)
 
-#### Run Backend API
+## Documentation
 
-```bash
-pnpm run dev:api
-# Runs on http://localhost:9000
-```
+**Getting Started**
+- [Quickstart](QUICKSTART.md) - Get running in 5 minutes
+- [Complete Setup Guide](docs/GETTING-STARTED.md) - Local development and Railway deployment
+- [Environment Variables](docs/environment-variables.md) - All configuration options
 
-#### Run Medusa Admin Dashboard
+**Integrations**
+- [Stripe Setup](docs/guides/stripe-setup.md) - Payments and vendor payouts
+- [Resend Setup](docs/guides/resend-setup.md) - Email notifications
+- [Algolia Setup](docs/guides/algolia-setup.md) - Product search
+- [TalkJS Setup](docs/guides/talkjs-setup.md) - Customer chat
 
-```bash
-pnpm run dev:vendor
-# Runs on http://localhost:7000
-```
+**Operations**
+- [Database Management](docs/database-management.md) - Migrations and backups
+- [Security](docs/security.md) - Best practices
+- [Monitoring](docs/monitoring.md) - Health checks and alerts
+- [Troubleshooting](docs/troubleshooting.md) - Common issues
 
-#### Run Next.js Storefront
+**Before Going Live**
+- [Production Checklist](docs/deployment/production-checklist.md) - Pre-launch verification
 
-```bash
-pnpm run dev:store
-# Runs on http://localhost:8000
-```
+## Requirements
 
-You should now have your MedusaJS backend, admin panel, and storefront running locally\!
+Before you start:
+- Node.js v20 or higher
+- PNPM v10 or higher
+- Docker (for local development)
+- Git
 
+For deployment you'll need accounts on:
+- Railway (hosting)
+- Stripe (payments)
+- Resend (emails)
+- Algolia (search)
+- TalkJS (chat)
 
+All have free tiers you can start with.
 
-## Deployment to Railway
+## Tech Stack
 
-Mercur is pre-configured for a smooth, multi-service deployment on Railway using Nixpacks.
+Backend: MedusaJS v2.7, PostgreSQL 16, Redis 7, TypeScript
 
-For a detailed, step-by-step guide on deploying this boilerplate to Railway, including service configuration (Backend, Vendor, Storefront) and environment variable setup, please refer to my comprehensive blog post:
+Storefront: Next.js 15, Tailwind CSS, next-intl
 
-**[How to Deploy Mercur to Railway: A Professional Guide for Serverless MedusaJS](https://dtoyoda10.medium.com/how-to-deploy-mercur-to-railway-a-professional-guide-for-serverless-medusajs-5a30f8e3dcdb)**
+Vendor Panel: Medusa Admin SDK, Vite, Tailwind CSS
 
-**Key deployment steps covered in the guide:**
-
-1.  **Clone/Fork** the repository to your GitHub.
-2.  **Create a New Railway Project** and connect it to your GitHub repo.
-3.  **Set up three distinct services** (Backend, Vendor, Storefront) within your Railway project, each with specific "Watch Paths", "Build Commands", and "Start Commands".
-4.  **Add a PostgreSQL Plugin** to your Railway project.
-5.  **Configure Environment Variables** for each service in Railway (ensuring `DATABASE_URL`, `JWT_SECRET`, `COOKIE_SECRET`, `CORS` origins, and optional S3/Redis settings are correct).
-6.  Trigger deployment and verify your live API endpoints.
-
-
+DevOps: PNPM, Turbo, GitHub Actions, Railway, Docker
 
 ## Project Structure
 
-This boilerplate adopts a monorepo structure to streamline development and deployment of multiple related applications.
-
 ```
-.
+mercur-railway-boilerplate/
 ├── apps/
-│   ├── backend/   # MedusaJS API backend
-│   ├── vendor/    # Medusa Admin Dashboard (Next.js/Medusa Admin)
-│   └── store/     # Next.js customer-facing storefront
-├── data/          # Contains seed.json for database seeding
-├── packages/      # Optional: For shared utilities, UI components, etc.
-│   └── ui/
-└── package.json   # Root PNPM workspace configuration
+│   ├── backend/              MedusaJS API server
+│   ├── storefront/           Next.js customer-facing app
+│   └── vendor-panel/         Admin dashboard for vendors
+├── packages/
+│   └── http-client/          Generated API client
+├── docs/                     Documentation
+├── .github/workflows/        CI/CD pipelines
+└── docker-compose.yml        Local development services
 ```
 
+## Common Commands
 
+```bash
+# Start all services
+pnpm run dev
+
+# Start individual services
+pnpm run dev:api      # Backend only
+pnpm run dev:vendor   # Vendor panel only
+pnpm run dev:store    # Storefront only
+
+# Database operations
+pnpm run db:init      # Initialize database
+pnpm run db:migrate   # Run migrations
+pnpm run db:admin     # Create admin user
+
+# Build for production
+pnpm run build
+
+# Run tests
+pnpm --filter=backend run test
+
+# Code quality
+pnpm run lint
+pnpm run format
+```
+
+## Deploying to Railway
+
+We have a complete step-by-step guide in [docs/deployment/railway.md](docs/deployment/railway.md).
+
+Quick version:
+1. Fork this repository
+2. Create a Railway project and connect your fork
+3. Add PostgreSQL database
+4. Create 3 services (backend, vendor panel, storefront)
+5. Configure environment variables
+6. Deploy
+
+Check the [production checklist](docs/deployment/production-checklist.md) before launching.
+
+## Environment Variables
+
+The boilerplate needs several environment variables. Here's what's required:
+
+**Backend (apps/backend/.env)**
+```env
+DATABASE_URL=postgres://...
+JWT_SECRET=your-secret-here
+COOKIE_SECRET=your-secret-here
+STRIPE_SECRET_API_KEY=sk_...
+RESEND_API_KEY=re_...
+ALGOLIA_APP_ID=...
+ALGOLIA_API_KEY=...
+```
+
+**Storefront (apps/storefront/.env)**
+```env
+MEDUSA_BACKEND_URL=http://localhost:9000
+NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY=pk_...
+NEXT_PUBLIC_STRIPE_KEY=pk_...
+```
+
+**Vendor Panel (apps/vendor-panel/.env)**
+```env
+VITE_MEDUSA_BACKEND_URL=http://localhost:9000
+```
+
+See [docs/environment-variables.md](docs/environment-variables.md) for complete documentation.
+
+## Troubleshooting
+
+**Backend won't start**
+- Make sure PostgreSQL is running: `docker ps`
+- Check your DATABASE_URL in .env
+- Verify migrations ran: `pnpm run db:migrate`
+
+**Can't log in to admin**
+- Create an admin user: `pnpm run db:admin`
+- Check backend is running: `curl http://localhost:9000/health`
+
+**Products not showing on storefront**
+- Verify products are published in the admin panel
+- Check NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY is set correctly
+
+More solutions in [docs/troubleshooting.md](docs/troubleshooting.md).
 
 ## Contributing
 
-Contributions are welcome\! If you have suggestions, bug reports, or want to contribute code, please open an issue or pull request.
+Contributions are welcome. Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+Quick steps:
+1. Fork the repo
+2. Create a feature branch
+3. Make your changes
+4. Run tests and linting
+5. Submit a pull request
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file.
+
+## Support
+
+- Documentation: [docs/](docs/)
+- Issues: [GitHub Issues](https://github.com/dtoyoda10/mercur-railway-boilerplate/issues)
+- Discussions: [GitHub Discussions](https://github.com/dtoyoda10/mercur-railway-boilerplate/discussions)
+
+## Credits
+
+Built with MedusaJS, Next.js, Railway, Stripe, and other open-source projects.

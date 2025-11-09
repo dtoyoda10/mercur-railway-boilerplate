@@ -1,3 +1,19 @@
+# Railway Deployment Configuration for MercurJS Boilerplate
+#
+# IMPORTANT: This boilerplate is designed as a MULTI-SERVICE deployment.
+# Railway requires separate service configuration for each app:
+#   - Backend API (apps/backend)
+#   - Vendor Panel (apps/vendor-panel)
+#   - Storefront (apps/storefront)
+#
+# This railway.toml provides the base configuration, but you MUST configure
+# each service individually in the Railway dashboard with:
+#   - Root Directory: apps/backend (or apps/vendor-panel, or apps/storefront)
+#   - Build Command: pnpm run build:api (or build:vendor, or build:store)
+#   - Start Command: pnpm run start:api (or start:vendor, or start:store)
+#
+# See docs/deployment/railway.md for complete step-by-step instructions.
+
 [phases.setup]
 nixpkgs = ["nodejs_22", "corepack", "pnpm_10"]
 
@@ -12,4 +28,9 @@ cmds = [
 cmds = ["pnpm run build"]
 
 [phases.start]
-cmds = ["pnpm run dev"]
+# This generic start command is for single-service testing only.
+# In production, use service-specific commands:
+#   - Backend: pnpm run start:api
+#   - Vendor: pnpm run start:vendor
+#   - Storefront: pnpm run start:store
+cmds = ["echo 'Please use service-specific start commands. See docs/deployment/railway.md'"]
