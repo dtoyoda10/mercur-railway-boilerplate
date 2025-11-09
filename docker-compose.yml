@@ -1,0 +1,67 @@
+version: '3.8'
+
+# Quick setup for local development
+# Run: docker-compose up -d
+# This spins up PostgreSQL and Redis (optional but recommended)
+
+services:
+  # PostgreSQL database - the heart of your Medusa store
+  postgres:
+    image: postgres:16-alpine
+    container_name: mercur-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: medusa_db
+    ports:
+      - "5432:5432"
+    volumes:
+      # Persist data across container restarts
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and job queues (optional but makes things way faster)
+  redis:
+    image: redis:7-alpine
+    container_name: mercur-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # pgAdmin - GUI for managing PostgreSQL (optional, useful for debugging)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: mercur-pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@mercur.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    profiles:
+      - tools  # Only starts when you run: docker-compose --profile tools up
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+# Pro tip: After starting these services, use these connection strings in your .env:
+# DATABASE_URL=postgres://postgres:postgres@localhost:5432/medusa_db
+# REDIS_URL=redis://localhost:6379
