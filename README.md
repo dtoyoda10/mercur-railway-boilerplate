@@ -23,8 +23,6 @@ git clone https://github.com/dtoyoda10/mercur-railway-boilerplate.git
 cd mercur-railway-boilerplate
 pnpm install
 
-docker-compose up -d
-
 cp apps/backend/.env.template apps/backend/.env
 cp apps/storefront/.env.template apps/storefront/.env
 cp apps/vendor-panel/.env.template apps/vendor-panel/.env
